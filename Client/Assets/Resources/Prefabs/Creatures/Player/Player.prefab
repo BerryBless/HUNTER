@@ -96,7 +96,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a07554970c992de40aa4a24426badbae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _grid: {fileID: 0}
+  _grid: {fileID: 5776178748160721412, guid: df599283bcbbe1e43b60da7955e7c519, type: 3}
   _animator: {fileID: 173690760}
   _sprite: {fileID: 8077466925384355712}
   _sprightCorrecrion: {x: 0.5, y: 0, z: 0}

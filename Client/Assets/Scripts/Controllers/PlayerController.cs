@@ -57,7 +57,7 @@ public class PlayerController : MonoBehaviour
     {
         PlayerUpdateController();
     }
-    
+
     private void LateUpdate()
     {
         // 카메라 따라가게
@@ -68,9 +68,11 @@ public class PlayerController : MonoBehaviour
         switch (State)
         {
             case PlayerState.Idle:
+                GetDirInput();
                 UpdateIdle();
                 break;
             case PlayerState.Moving:
+                GetDirInput();
                 UpdateMoving();
                 break;
             case PlayerState.Attack:
@@ -82,8 +84,7 @@ public class PlayerController : MonoBehaviour
     // STATE가 IDLE일떄 업데이트 할것들
     void UpdateIdle()
     {
-        GetDirInput();
-        if(_isKeyPress == true)
+        if (_isKeyPress == true)
         {
             State = PlayerState.Moving;
         }
@@ -109,7 +110,8 @@ public class PlayerController : MonoBehaviour
         }
     }
     // STATE가 Attack일때 업데이트 할것들
-    void UpdateAttack() { 
+    void UpdateAttack()
+    {
         // TODO 공격!
     }
 
@@ -215,7 +217,7 @@ public class PlayerController : MonoBehaviour
                     break;
             }
         }
-        else if(State == PlayerState.Attack)
+        else if (State == PlayerState.Attack)
         {
             switch (_dir)
             {

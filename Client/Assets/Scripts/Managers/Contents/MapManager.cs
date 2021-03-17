@@ -22,7 +22,7 @@ public class MapManager
 	public int SizeX { get { return MaxX - MinX + 1; } }
 	public int SizeY { get { return MaxY - MinY + 1; } }
 
-	bool[,] _collision;
+	bool[,] _collision;//장애물 위치 저장할 불리언 배열 (y, x)
 
 	// 갈수있냐 (충돌할 물체가 있냐)
 	public bool CanGo(Vector3Int cellPos)

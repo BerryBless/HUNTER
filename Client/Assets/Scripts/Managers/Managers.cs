@@ -26,6 +26,14 @@ public class Managers : MonoBehaviour
         }
     }
 
+    // 게임 콘텐츠에 관한 메니져
+    #region Contents
+    MapManager _map = new MapManager();
+
+    public static MapManager Map { get { return Instance._map; } }
+    #endregion
+
+    // 게임 실행에 관한 메니져
     #region Core
     ResourceManager _resource = new ResourceManager();
 
@@ -44,7 +52,6 @@ public class Managers : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
         Init();
     }
 

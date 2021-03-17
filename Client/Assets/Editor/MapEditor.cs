@@ -15,7 +15,8 @@ public class MapEditor : MonoBehaviour
     [MenuItem("Tools/GenerateMap %#m")] // Ctrl + Shift + m
     private static void GenerateMap()
     {
-        GenerateMap("../Common/MapData");
+        GenerateMap("Assets/Resources/Map");    // 클라이언트에서 쓸거
+        GenerateMap("../Common/MapData");       // 서버에서 쓸꺼
     }
 
     private static void GenerateMap(string pathPrefix)

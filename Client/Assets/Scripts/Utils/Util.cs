@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class Util
 {
+    // 복잡한데 자주 쓰는거 모아놓기
+
+    // 자식 찾기
     public static GameObject FindChild(GameObject go, string name = null, bool recursive = false)
     {
         Transform transform = FindChild<Transform>(go, name, recursive);
@@ -12,6 +15,7 @@ public class Util
 
         return transform.gameObject;
     }
+    // 자식중에 컴포넌트 찾기
     public static T FindChild<T>(GameObject go, string name = null, bool recursive = false) where T : UnityEngine.Object
     {
         if (go == null) return null;

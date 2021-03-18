@@ -102,6 +102,7 @@ public class PlayerController : MonoBehaviour
         if (dist < _speed * Time.deltaTime)
         {
             transform.position = destPos;
+            Debug.Log($"destPos({_cellPos})");
             MoveToNextPos();
         }
         else

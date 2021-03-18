@@ -5,7 +5,7 @@ using static Define;
 
 public class PlayerController : BaseController
 {
-
+    private List<GameObject> _pathUi = new List<GameObject>();
     private Vector3Int _destCellPos;
     private List<Vector3Int> _movePath = null;
     bool _isClick = false;
@@ -148,19 +148,23 @@ public class PlayerController : BaseController
 
     protected override void MoveToNextPos()
     {
-        if (_movePath == null || _isClick)
+        if (_movePath == null)
         {
-            _movePath = Managers.Map.FindPath(CellPos, _destCellPos);
+            return;
         }
         if (_movePath.Count <= 1)
         {
             _movePath = null;
+            ClearPath();
             State = CreatureState.Idle;
             return;
         }
 
         Vector3Int nextPos = _movePath[1];
         _movePath.RemoveAt(0);
+        Managers.Resource.Destroy(_pathUi[0]);
+        _pathUi.RemoveAt(0);
+
         Vector3Int moveCellDir = nextPos - CellPos;
 
         Dir = GetDirFromVector(moveCellDir);
@@ -204,10 +208,34 @@ public class PlayerController : BaseController
             Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             _destCellPos = Managers.Map.CurrentGrid.WorldToCell(mousePos);
             State = CreatureState.Moving;
-            _isClick = true;
+
+            _movePath = Managers.Map.FindPath(CellPos, _destCellPos);
+            ViewPath();
             return;
         }
         _isClick = false;
     }
 
+    private void ViewPath()
+    {
+
+        ClearPath();
+
+        for (int i = 0; i < _movePath.Count; i++)
+        {
+            GameObject go = Managers.Resource.Instantiate("Ui/Path");
+            go.transform.position = _movePath[i] + new Vector3(0.5f, 0.5f, 0);
+
+            _pathUi.Add(go);
+        }
+    }
+
+    private void ClearPath()
+    {
+        foreach (GameObject go in _pathUi)
+        {
+            Managers.Resource.Destroy(go);
+        }
+        _pathUi.Clear();
+    }
 }

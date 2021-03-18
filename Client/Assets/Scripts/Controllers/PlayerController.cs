@@ -22,11 +22,11 @@ public class PlayerController : BaseController
         switch (State)
         {
             case CreatureState.Idle:
-                GetDirInput();
+                GetDirInputKeyboard();
                 UpdateIdle();
                 break;
             case CreatureState.Moving:
-                GetDirInput();
+                GetDirInputKeyboard();
                 UpdateMoving();
                 break;
             case CreatureState.Attack:
@@ -35,7 +35,7 @@ public class PlayerController : BaseController
         }
 
     }
-    // STATE가 IDLE일떄 업데이트 할것들
+
     protected override void UpdateIdle()
     {
         if (_isKeyPress == true)
@@ -43,16 +43,13 @@ public class PlayerController : BaseController
             State = CreatureState.Moving;
         }
     }
-
     protected override void UpdateAttack()
     {
         // TODO 공격!
     }
-
     protected override void UpdateDead()
     {
     }
-
     protected override void UpdateAnimation()
     {
         if (State == CreatureState.Idle)
@@ -145,7 +142,6 @@ public class PlayerController : BaseController
         }
     }
 
-    // 오브젝트 판정 실제로 이동
     protected override void MoveToNextPos()
     {
         // 이동키 땠을때
@@ -182,7 +178,7 @@ public class PlayerController : BaseController
     #endregion
 
     // 키보드 입력으로 방향 결정
-    void GetDirInput()
+    private void GetDirInputKeyboard()
     {
         _isKeyPress = true;
         float axisV = Input.GetAxisRaw("Vertical");     // 수직
@@ -201,5 +197,9 @@ public class PlayerController : BaseController
         }
     }
 
+    private void GetInputMouse()
+    {
+
+    }
     
 }

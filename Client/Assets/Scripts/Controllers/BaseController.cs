@@ -61,7 +61,9 @@ public class BaseController : MonoBehaviour
     #endregion
 
     #region Virtual Methods
-    protected virtual void Init() {
+    // 초기화 (Start이벤트에서 실행)
+    protected virtual void Init()
+    {
         _sprite = GetComponent<SpriteRenderer>();
         _animator = GetComponent<Animator>();
         Vector3 pos = Managers.Map.CurrentGrid.CellToWorld(CellPos);
@@ -69,6 +71,8 @@ public class BaseController : MonoBehaviour
 
         UpdateAnimation();
     }
+
+    // 업데이트 (Update이벤트에서 실행)
     protected virtual void UpdateController()
     {
         switch (State)
@@ -85,7 +89,10 @@ public class BaseController : MonoBehaviour
         }
     }
 
+    // State == Idle 상태일떄 업데이트 할것
     protected virtual void UpdateIdle() { }
+
+    // State == Moving 상태일떄 업데이트 할것
     protected virtual void UpdateMoving()
     {
         Vector3 destPos = Managers.Map.CurrentGrid.CellToWorld(CellPos) + _sprightCorrecrion; // 목적지
@@ -104,8 +111,14 @@ public class BaseController : MonoBehaviour
             transform.position += moveDir.normalized * _speed * Time.deltaTime; // 정규화 방향으로 스피드만큼 이동
         }
     }
+
+    // State == Attack 상태일떄 업데이트 할것
     protected virtual void UpdateAttack() { }
+
+    // State == Dead 상태일떄 업데이트 할것
     protected virtual void UpdateDead() { }
+
+    // Dir|State에따른 에니메이션 업데이트
     protected virtual void UpdateAnimation()
     {
         if (State == CreatureState.Idle)
@@ -198,6 +211,7 @@ public class BaseController : MonoBehaviour
         }
     }
 
+    // 오브젝트 판정 실제로 이동
     protected virtual void MoveToNextPos() { }
 
     #endregion

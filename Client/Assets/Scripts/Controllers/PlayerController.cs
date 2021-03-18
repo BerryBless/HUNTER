@@ -5,7 +5,10 @@ using static Define;
 
 public class PlayerController : BaseController
 {
+
     private Vector3Int _destCellPos;
+    private List<Vector3Int> _movePath = null;
+    bool _isClick = false;
     //bool _isKeyPress = false;// 이동키 눌렀는지
     private void LateUpdate()
     {
@@ -145,43 +148,26 @@ public class PlayerController : BaseController
 
     protected override void MoveToNextPos()
     {
-        Vector3Int moveCellDir = _destCellPos - CellPos;
-        // TODO : Astar
-        if (moveCellDir.x > 0)
-            Dir = MoveDir.Right;
-        else if (moveCellDir.x < 0)
-            Dir = MoveDir.Left;
-        else if (moveCellDir.y > 0)
-            Dir = MoveDir.Up;
-        else if (moveCellDir.y < 0)
-            Dir = MoveDir.Down;
-        else
+        if (_movePath == null || _isClick)
         {
+            _movePath = Managers.Map.FindPath(CellPos, _destCellPos);
+        }
+        if (_movePath.Count <= 1)
+        {
+            _movePath = null;
             State = CreatureState.Idle;
             return;
         }
 
-        Vector3Int destPos = CellPos;
+        Vector3Int nextPos = _movePath[1];
+        _movePath.RemoveAt(0);
+        Vector3Int moveCellDir = nextPos - CellPos;
 
-        switch (Dir)
-        {
-            case MoveDir.Up:
-                destPos += Vector3Int.up;
-                break;
-            case MoveDir.Down:
-                destPos += Vector3Int.down;
-                break;
-            case MoveDir.Left:
-                destPos += Vector3Int.left;
-                break;
-            case MoveDir.Right:
-                destPos += Vector3Int.right;
-                break;
-        }
+        Dir = GetDirFromVector(moveCellDir);
 
-        if (Managers.Map.CanGo(destPos))
+        if (Managers.Map.CanGo(nextPos))
         {
-            CellPos = destPos;
+            CellPos = nextPos;
         }
         else
         {
@@ -212,12 +198,16 @@ public class PlayerController : BaseController
 
     private void GetInputMouse()
     {
+
         if (Input.GetMouseButtonDown(1))
         {
             Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             _destCellPos = Managers.Map.CurrentGrid.WorldToCell(mousePos);
             State = CreatureState.Moving;
+            _isClick = true;
+            return;
         }
+        _isClick = false;
     }
 
 }

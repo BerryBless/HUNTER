@@ -216,6 +216,8 @@ public class BaseController : MonoBehaviour
     // 오브젝트 판정 실제로 이동
     protected virtual void MoveToNextPos()
     {
+        // State를 Idle 로 바꾸는부분 여기 삽입
+
         Vector3Int destPos = CellPos;
         switch (Dir)
         {
@@ -267,7 +269,7 @@ public class BaseController : MonoBehaviour
         return frontPos;
     }
 
-    // 벡터에 따른 방향 Dir 정하기
+    // 방향벡터에 따른 방향 Dir 정하기
     public MoveDir GetDirFromVector(Vector3Int dir)
     {
         if (dir.x > 0)

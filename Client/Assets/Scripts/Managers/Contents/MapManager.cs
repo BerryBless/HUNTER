@@ -88,4 +88,38 @@ public class MapManager
         }
     }
 
+    #region PathFinding
+
+    public List<Vector3Int> FindPath(Vector3Int startCellPos, Vector3Int destCellPos)
+    {
+        // TODO : Astar
+        List<Vector3Int> path = new List<Vector3Int>() { startCellPos };
+
+        Vector3Int moveCellDir = destCellPos - startCellPos;
+        while(moveCellDir.magnitude >= 1)
+        {
+            if (moveCellDir.x > 0)
+            {
+                startCellPos += Vector3Int.right;
+            }
+            else if (moveCellDir.x < 0)
+            {
+                startCellPos += Vector3Int.left;
+            }
+            else if (moveCellDir.y > 0)
+            {
+                startCellPos += Vector3Int.up;
+            }
+            else if (moveCellDir.y < 0)
+            {
+                startCellPos += Vector3Int.down;
+            }
+            path.Add(startCellPos);
+            moveCellDir = destCellPos - startCellPos;
+        }
+
+        return path;
+    }
+
+    #endregion
 }

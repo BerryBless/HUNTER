@@ -214,7 +214,32 @@ public class BaseController : MonoBehaviour
     }
 
     // 오브젝트 판정 실제로 이동
-    protected virtual void MoveToNextPos() { }
+    protected virtual void MoveToNextPos()
+    {
+        Vector3Int destPos = CellPos;
+        switch (Dir)
+        {
+            case MoveDir.Up:
+                destPos += Vector3Int.up;
+                break;
+            case MoveDir.Down:
+                destPos += Vector3Int.down;
+                break;
+            case MoveDir.Left:
+                destPos += Vector3Int.left;
+                break;
+            case MoveDir.Right:
+                destPos += Vector3Int.right;
+                break;
+        }
+
+        // 충돌체크
+        if (Managers.Map.CanGo(destPos) == true)
+        {
+            //TODO 오브젝트 충돌
+            CellPos = destPos;
+        }
+    }
 
     #endregion
 

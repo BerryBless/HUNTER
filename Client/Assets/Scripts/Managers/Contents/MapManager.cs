@@ -22,11 +22,11 @@ public class MapManager
     {
         if (cellPos.x < MinX || cellPos.x + 1 > MaxX)
             return false;
-        if (cellPos.y - 1 < MinY || cellPos.y > MaxY)
+        if (cellPos.y < MinY || cellPos.y > MaxY)
             return false;
 
         int x = cellPos.x - MinX;
-        int y = MaxY - cellPos.y + 1;
+        int y = MaxY - cellPos.y;
         return !_collision[y, x];
     }
 

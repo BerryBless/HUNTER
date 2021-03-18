@@ -5,8 +5,8 @@ using static Define;
 
 public class PlayerController : BaseController
 {
-
-    bool _isKeyPress = false;// 이동키 눌렀는지
+    private Vector3Int _destCellPos;
+    //bool _isKeyPress = false;// 이동키 눌렀는지
     private void LateUpdate()
     {
         // 카메라 따라가게
@@ -43,26 +43,6 @@ public class PlayerController : BaseController
 
     protected override void UpdateIdle()
     {
-        if (_isKeyPress == true)
-        {
-            State = CreatureState.Moving;
-        }
-    }
-    protected override void UpdateMoving()
-    {
-        Vector3 destPos = Managers.Map.CurrentGrid.CellToWorld(CellPos) + _sprightCorrecrion; // 목적지
-        Vector3 moveDir = destPos - transform.position;                     // 목적지까지의 방향백터
-
-        // 도착이냐
-        float dist = moveDir.magnitude;
-        if (dist < _speed * Time.deltaTime)
-        {
-            transform.position = destPos;
-        }
-        else
-        {
-            transform.position += moveDir.normalized * _speed * Time.deltaTime; // 정규화 방향으로 스피드만큼 이동
-        }
     }
     protected override void UpdateAttack()
     {
@@ -165,14 +145,24 @@ public class PlayerController : BaseController
 
     protected override void MoveToNextPos()
     {
-        // 이동키 땠을때
-        if (_isKeyPress == false)
+        Vector3Int moveCellDir = _destCellPos - CellPos;
+        // TODO : Astar
+        if (moveCellDir.x > 0)
+            Dir = MoveDir.Right;
+        else if (moveCellDir.x < 0)
+            Dir = MoveDir.Left;
+        else if (moveCellDir.y > 0)
+            Dir = MoveDir.Up;
+        else if (moveCellDir.y < 0)
+            Dir = MoveDir.Down;
+        else
         {
             State = CreatureState.Idle;
             return;
         }
 
         Vector3Int destPos = CellPos;
+
         switch (Dir)
         {
             case MoveDir.Up:
@@ -189,45 +179,45 @@ public class PlayerController : BaseController
                 break;
         }
 
-        // 충돌체크
-        if (Managers.Map.CanGo(destPos) == true)
+        if (Managers.Map.CanGo(destPos))
         {
-            //TODO 오브젝트 충돌
             CellPos = destPos;
+        }
+        else
+        {
+            State = CreatureState.Idle;
         }
     }
     #endregion
 
     // 키보드 입력으로 방향 결정
-    private void GetDirInputKeyboard()
-    {
-        _isKeyPress = true;
-        float axisV = Input.GetAxisRaw("Vertical");     // 수직
-        float axisH = Input.GetAxisRaw("Horizontal");   // 수평
-        if (axisV != 0)
-        {
-            Dir = axisV > 0 ? MoveDir.Up : MoveDir.Down;   // + : -
-        }
-        else if (axisH != 0)
-        {
-            Dir = axisH > 0 ? MoveDir.Right : MoveDir.Left;// + : -
-        }
-        else
-        {
-            _isKeyPress = false;
-        }
-    }
+    //private void GetDirInputKeyboard()
+    //{
+    //    //_isKeyPress = true;
+    //    float axisV = Input.GetAxisRaw("Vertical");     // 수직
+    //    float axisH = Input.GetAxisRaw("Horizontal");   // 수평
+    //    if (axisV != 0)
+    //    {
+    //        Dir = axisV > 0 ? MoveDir.Up : MoveDir.Down;   // + : -
+    //    }
+    //    else if (axisH != 0)
+    //    {
+    //        Dir = axisH > 0 ? MoveDir.Right : MoveDir.Left;// + : -
+    //    }
+    //    else
+    //    {
+    //        //_isKeyPress = false;
+    //    }
+    //}
 
     private void GetInputMouse()
     {
         if (Input.GetMouseButtonDown(1))
         {
             Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            CellPos = Managers.Map.CurrentGrid.WorldToCell(mousePos);
+            _destCellPos = Managers.Map.CurrentGrid.WorldToCell(mousePos);
             State = CreatureState.Moving;
-            //Vector3 woldPos = Managers.Map.CurrentGrid.CellToWorld(cellPos) + new Vector3(0.5f, 0.5f, 0);
-
         }
     }
-    
+
 }

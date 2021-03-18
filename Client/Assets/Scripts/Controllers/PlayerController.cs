@@ -8,7 +8,6 @@ public class PlayerController : BaseController
     private List<GameObject> _pathUi = new List<GameObject>();
     private Vector3Int _destCellPos;
     private List<Vector3Int> _movePath = null;
-    bool _isClick = false;
     //bool _isKeyPress = false;// 이동키 눌렀는지
     private void LateUpdate()
     {
@@ -207,13 +206,14 @@ public class PlayerController : BaseController
         {
             Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             _destCellPos = Managers.Map.CurrentGrid.WorldToCell(mousePos);
-            State = CreatureState.Moving;
 
-            _movePath = Managers.Map.FindPath(CellPos, _destCellPos);
-            ViewPath();
-            return;
+            if (Managers.Map.CanGo(_destCellPos))
+            {
+                State = CreatureState.Moving;
+                _movePath = Managers.Map.FindPath(CellPos, _destCellPos);
+                ViewPath();
+            }
         }
-        _isClick = false;
     }
 
     private void ViewPath()

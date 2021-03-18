@@ -86,6 +86,9 @@ public class BaseController : MonoBehaviour
             case CreatureState.Attack:
                 UpdateAttack();
                 break;
+            case CreatureState.Dead:
+                UpdateDead();
+                break;
         }
     }
 
@@ -103,7 +106,6 @@ public class BaseController : MonoBehaviour
         if (dist < _speed * Time.deltaTime)
         {
             transform.position = destPos;
-            // Debug.Log($"destPos({CellPos})");
             MoveToNextPos();
         }
         else

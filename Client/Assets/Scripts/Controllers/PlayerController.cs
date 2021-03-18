@@ -22,15 +22,20 @@ public class PlayerController : BaseController
         switch (State)
         {
             case CreatureState.Idle:
-                GetDirInputKeyboard();
+                //GetDirInputKeyboard();
+                GetInputMouse();
                 UpdateIdle();
                 break;
             case CreatureState.Moving:
-                GetDirInputKeyboard();
+                //GetDirInputKeyboard();
+                GetInputMouse();
                 UpdateMoving();
                 break;
             case CreatureState.Attack:
                 UpdateAttack();
+                break;
+            case CreatureState.Dead:
+                UpdateDead();
                 break;
         }
 
@@ -41,6 +46,22 @@ public class PlayerController : BaseController
         if (_isKeyPress == true)
         {
             State = CreatureState.Moving;
+        }
+    }
+    protected override void UpdateMoving()
+    {
+        Vector3 destPos = Managers.Map.CurrentGrid.CellToWorld(CellPos) + _sprightCorrecrion; // 목적지
+        Vector3 moveDir = destPos - transform.position;                     // 목적지까지의 방향백터
+
+        // 도착이냐
+        float dist = moveDir.magnitude;
+        if (dist < _speed * Time.deltaTime)
+        {
+            transform.position = destPos;
+        }
+        else
+        {
+            transform.position += moveDir.normalized * _speed * Time.deltaTime; // 정규화 방향으로 스피드만큼 이동
         }
     }
     protected override void UpdateAttack()
@@ -199,7 +220,14 @@ public class PlayerController : BaseController
 
     private void GetInputMouse()
     {
+        if (Input.GetMouseButtonDown(1))
+        {
+            Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            CellPos = Managers.Map.CurrentGrid.WorldToCell(mousePos);
+            State = CreatureState.Moving;
+            //Vector3 woldPos = Managers.Map.CurrentGrid.CellToWorld(cellPos) + new Vector3(0.5f, 0.5f, 0);
 
+        }
     }
     
 }

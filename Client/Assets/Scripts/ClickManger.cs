@@ -18,9 +18,9 @@ public class ClickManger : MonoBehaviour
             Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             Vector3Int cellPos = _grid.WorldToCell(mousePos);
 
-            Vector3 woldPos= _grid.CellToWorld(cellPos)+ new Vector3(0.5f, 0.5f, 0);
+            Vector3 woldPos = _grid.CellToWorld(cellPos) + new Vector3(0.5f, 0.5f, 0);
             transform.position = woldPos;
-                Debug.Log($"cellPos({cellPos}) , worldPos({woldPos})");
+            Debug.Log($"cellPos({cellPos}) , worldPos({woldPos})");
         }
     }
 }

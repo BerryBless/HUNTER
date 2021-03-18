@@ -3,57 +3,110 @@ using System.Collections.Generic;
 using UnityEngine;
 using static Define;
 
-public class PlayerController : BaseController
+public class BaseController : MonoBehaviour
 {
+    #region Values
+    protected Animator _animator;                               // 크리쳐의 애니메이터
+    protected SpriteRenderer _sprite;                           // 크리쳐의 스프라이트
+    [SerializeField]
+    protected Vector3 _sprightCorrecrion = new Vector3(0.5f, 0.5f, 0);// 스프라이트 오차값
+    [SerializeField]
+    protected float _speed = 6f;  // 이동스피드
+    #endregion
 
-    bool _isKeyPress = false;// 이동키 눌렀는지
-    private void LateUpdate()
+    #region Properties
+    private CreatureState _state = CreatureState.Idle;      // 오브젝트 상태 Idle/Moveing/Attack/Dead
+    protected CreatureState State
     {
-        // 카메라 따라가게
-        Camera.main.transform.position = new Vector3(transform.position.x, transform.position.y, -10);
+        get { return _state; }
+        set
+        {
+            if (_state == value) return; _state = value;
+            UpdateAnimation();                  // 바뀔때 자동업데이트
+        }
     }
-    #region override
-    protected override void Init()
+    private MoveDir _dir = MoveDir.Down;       // 이동방향
+    protected MoveDir Dir
     {
-        base.Init();
+        get { return _dir; }
+        set
+        {
+            if (_dir == value) return; _dir = value;
+            UpdateAnimation();                 // 바뀔떄 자동업데이트
+        }
     }
-    protected override void UpdateController()
+
+    private Vector3Int _cellPos;            // 타일맵의 좌표로 계산
+    protected Vector3Int CellPos
+    {
+        get { return _cellPos; }
+        set
+        {
+            _cellPos.x = value.x;
+            _cellPos.y = value.y;
+            _cellPos.z = value.z;
+        }
+    }
+    #endregion
+
+    #region UnityEvent
+    void Start()
+    {
+        Init();
+    }
+    void Update()
+    {
+        UpdateController();
+    }
+    #endregion
+
+    #region Virtual Methods
+    protected virtual void Init() {
+        _sprite = GetComponent<SpriteRenderer>();
+        _animator = GetComponent<Animator>();
+        Vector3 pos = Managers.Map.CurrentGrid.CellToWorld(CellPos);
+        transform.position = pos;
+
+        UpdateAnimation();
+    }
+    protected virtual void UpdateController()
     {
         switch (State)
         {
             case CreatureState.Idle:
-                GetDirInput();
                 UpdateIdle();
                 break;
             case CreatureState.Moving:
-                GetDirInput();
                 UpdateMoving();
                 break;
             case CreatureState.Attack:
                 UpdateAttack();
                 break;
         }
-
     }
-    // STATE가 IDLE일떄 업데이트 할것들
-    protected override void UpdateIdle()
+
+    protected virtual void UpdateIdle() { }
+    protected virtual void UpdateMoving()
     {
-        if (_isKeyPress == true)
+        Vector3 destPos = Managers.Map.CurrentGrid.CellToWorld(CellPos) + _sprightCorrecrion; // 목적지
+        Vector3 moveDir = destPos - transform.position;                     // 목적지까지의 방향백터
+
+        // 도착이냐
+        float dist = moveDir.magnitude;
+        if (dist < _speed * Time.deltaTime)
         {
-            State = CreatureState.Moving;
+            transform.position = destPos;
+            // Debug.Log($"destPos({CellPos})");
+            MoveToNextPos();
+        }
+        else
+        {
+            transform.position += moveDir.normalized * _speed * Time.deltaTime; // 정규화 방향으로 스피드만큼 이동
         }
     }
-
-    protected override void UpdateAttack()
-    {
-        // TODO 공격!
-    }
-
-    protected override void UpdateDead()
-    {
-    }
-
-    protected override void UpdateAnimation()
+    protected virtual void UpdateAttack() { }
+    protected virtual void UpdateDead() { }
+    protected virtual void UpdateAnimation()
     {
         if (State == CreatureState.Idle)
         {
@@ -145,61 +198,45 @@ public class PlayerController : BaseController
         }
     }
 
-    // 오브젝트 판정 실제로 이동
-    protected override void MoveToNextPos()
-    {
-        // 이동키 땠을때
-        if (_isKeyPress == false)
-        {
-            State = CreatureState.Idle;
-            return;
-        }
+    protected virtual void MoveToNextPos() { }
 
-        Vector3Int destPos = CellPos;
+    #endregion
+
+    #region Methods
+    // Dir 방향의 한칸앞 셀포지션 리턴
+    public Vector3Int GetFrontCellPos()
+    {
+        Vector3Int frontPos = CellPos;
+
         switch (Dir)
         {
             case MoveDir.Up:
-                destPos += Vector3Int.up;
+                frontPos += Vector3Int.up;
                 break;
             case MoveDir.Down:
-                destPos += Vector3Int.down;
+                frontPos += Vector3Int.down;
                 break;
             case MoveDir.Left:
-                destPos += Vector3Int.left;
+                frontPos += Vector3Int.left;
                 break;
             case MoveDir.Right:
-                destPos += Vector3Int.right;
+                frontPos += Vector3Int.right;
                 break;
         }
+        return frontPos;
+    }
 
-        // 충돌체크
-        if (Managers.Map.CanGo(destPos) == true)
-        {
-            //TODO 오브젝트 충돌
-            CellPos = destPos;
-        }
+    // 벡터에 따른 방향 Dir 정하기
+    public MoveDir GetDirFromVector(Vector3Int dir)
+    {
+        if (dir.x > 0)
+            return MoveDir.Right;
+        else if (dir.x < 0)
+            return MoveDir.Left;
+        else if (dir.y > 0)
+            return MoveDir.Up;
+        return MoveDir.Down;
     }
     #endregion
-
-    // 키보드 입력으로 방향 결정
-    void GetDirInput()
-    {
-        _isKeyPress = true;
-        float axisV = Input.GetAxisRaw("Vertical");     // 수직
-        float axisH = Input.GetAxisRaw("Horizontal");   // 수평
-        if (axisV != 0)
-        {
-            Dir = axisV > 0 ? MoveDir.Up : MoveDir.Down;   // + : -
-        }
-        else if (axisH != 0)
-        {
-            Dir = axisH > 0 ? MoveDir.Right : MoveDir.Left;// + : -
-        }
-        else
-        {
-            _isKeyPress = false;
-        }
-    }
-
-    
 }
+

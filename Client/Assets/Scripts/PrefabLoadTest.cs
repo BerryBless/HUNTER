@@ -7,7 +7,7 @@ public class PrefabLoadTest : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Managers.Map.LoadMap(2);
+        Managers.Map.LoadMap(1);
         Managers.Resource.Instantiate("Creatures/Player/Player");
     }
 

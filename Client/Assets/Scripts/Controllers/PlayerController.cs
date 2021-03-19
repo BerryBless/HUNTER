@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using static Define;
 
@@ -18,6 +19,9 @@ public class PlayerController : BaseController
     protected override void Init()
     {
         base.Init();
+        //Camera.main.orthographicSize = 30;
+        //_speed = 30;
+        //transform.localScale = new Vector3(5, 5, 0);
     }
     protected override void UpdateController()
     {
@@ -225,7 +229,7 @@ public class PlayerController : BaseController
         {
             GameObject go = Managers.Resource.Instantiate("Ui/Path");
             go.transform.position = _movePath[i] + new Vector3(0.5f, 0.5f, 0);
-
+            go.GetComponent<TextMeshPro>().text = $"*{i}*";
             _pathUi.Add(go);
         }
     }

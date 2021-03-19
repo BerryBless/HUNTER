@@ -229,7 +229,7 @@ public class PlayerController : BaseController
         {
             GameObject go = Managers.Resource.Instantiate("Ui/Path");
             go.transform.position = _movePath[i] + new Vector3(0.5f, 0.5f, 0);
-            go.GetComponent<TextMeshPro>().text = $"*{i}*";
+            //  GameObject tm = FindChild()
             _pathUi.Add(go);
         }
     }

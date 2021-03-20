@@ -59,6 +59,10 @@ public class PoolManager
 
             poolable.gameObject.SetActive(true);                        // 사용! 게임상에 나타남
 
+            // DontDestroyOnLoad 해제
+            if (parent == null)
+                poolable.transform.parent = Camera.main.transform;
+
             poolable.transform.parent = parent;                         // 사용할 곳 에 붙기
             poolable.IsUsing = true;                                    // 사용중! 표시
 

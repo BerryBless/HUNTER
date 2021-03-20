@@ -31,7 +31,7 @@ public class PoolManager
         {
             GameObject go = Object.Instantiate<GameObject>(Original);   // 원본 복사해서
             go.name = Original.name;                                    // 이름바꾸고
-            return Util.GetOrAddComponent<Poolable>(go);                // Poolable 반환 없음 달아주기
+            return go.GetOrAddComponent<Poolable>();                // Poolable 반환 없음 달아주기
         }
 
         // POOL에 넣기

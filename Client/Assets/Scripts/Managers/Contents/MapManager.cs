@@ -246,11 +246,11 @@ public class MapManager
 
                 // 예약 진행
 
-                if (Util.TryAdd<Pos, int>(openList, next, g + h) == false)
+                if (openList.TryAdd(next, g + h) == false)
                     openList[next] = g + h;
 
                 pq.Push(new PQNode() { F = g + h, G = g, Y = next.Y, X = next.X });
-                if (Util.TryAdd<Pos, Pos>(parent, next, node) == false)
+                if (parent.TryAdd( next, node) == false)
                     parent[next] = node;
             }
         }

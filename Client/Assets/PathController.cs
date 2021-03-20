@@ -9,7 +9,7 @@ public class PathController : MonoBehaviour
     // Start is called before the first frame update
     private void Awake()
     {
-        _textMeshPro = Util.FindChild<TextMeshPro>(gameObject);
+        _textMeshPro = gameObject.FindChild<TextMeshPro>();
     }
 
     

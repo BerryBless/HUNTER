@@ -27,8 +27,8 @@ public class MapEditor : MonoBehaviour
         // 순회
         foreach (GameObject go in gameObjects)
         {
-            Tilemap tmBase = Util.FindChild<Tilemap>(go, "Tilemap_Base", true); // 맵전체 크기정보
-            Tilemap tmColl = Util.FindChild<Tilemap>(go, "Tilemap_Collision", true); // 충돌체크 정보가있는 콜리션
+            Tilemap tmBase = go.FindChild<Tilemap>("Tilemap_Base", true);       // 맵전체 크기정보
+            Tilemap tmColl = go.FindChild<Tilemap>("Tilemap_Collision", true);  // 충돌체크 정보가있는 콜리션
 
             // 추출한거 출력하기
             using (var writer = File.CreateText($"{pathPrefix}/{go.name}.txt"))

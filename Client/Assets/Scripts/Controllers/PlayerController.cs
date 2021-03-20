@@ -206,7 +206,7 @@ public class PlayerController : BaseController
     private void GetInputMouse()
     {
 
-        if (Input.GetMouseButtonDown(1))
+        if (Input.GetMouseButton(1))
         {
             Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             _destCellPos = Managers.Map.CurrentGrid.WorldToCell(mousePos);
@@ -229,7 +229,7 @@ public class PlayerController : BaseController
         {
             GameObject go = Managers.Resource.Instantiate("Ui/Path");
             go.transform.position = _movePath[i] + new Vector3(0.5f, 0.5f, 0);
-            //  GameObject tm = FindChild()
+            go.GetComponent<PathController>().ChangePathText($"{i}");
             _pathUi.Add(go);
         }
     }

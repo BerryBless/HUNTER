@@ -6,6 +6,12 @@ public class Util
 {
     // 복잡한데 자주 쓰는거 모아놓기
 
+    // 컴포넌트를 찾고 널이면 추가
+    public static T GetOrAddComponent<T>(GameObject go) where T : UnityEngine.Component
+    {
+        return go.GetComponent<T>() ?? go.AddComponent<T>();
+    }
+
     // 자식 찾기
     public static GameObject FindChild(GameObject go, string name = null, bool recursive = false)
     {

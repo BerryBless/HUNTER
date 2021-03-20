@@ -12,6 +12,7 @@ public class ResourceManager
 
     public GameObject Instantiate(string path, Transform parent = null)
     {
+        // TODO POOL: 원본 들고있으면 바로 사용
         GameObject original = Load<GameObject>($"Prefabs/{path}");
         if (original == null)
         {
@@ -19,7 +20,7 @@ public class ResourceManager
             return null;
         }
 
-        // TODO POOL: 풀링해놓기
+        // TODO POOL: 풀에서 찾기
 
         GameObject go = Object.Instantiate(original, parent);
         go.name = original.name;

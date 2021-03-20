@@ -97,7 +97,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _sprightCorrecrion: {x: 0.5, y: 1, z: 0}
-  _speed: 6
+  _speed: 5
 --- !u!95 &173690760
 Animator:
   serializedVersion: 3

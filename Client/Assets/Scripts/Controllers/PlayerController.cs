@@ -8,7 +8,7 @@ public class PlayerController : BaseController
 {
     private List<GameObject> _pathUi = new List<GameObject>();
     private Vector3Int _destCellPos;
-    private List<Vector3Int> _movePath = null;
+    private List<Vector2Int> _movePath = null;
     //bool _isKeyPress = false;// 이동키 눌렀는지
     private void LateUpdate()
     {
@@ -163,18 +163,18 @@ public class PlayerController : BaseController
             return;
         }
 
-        Vector3Int nextPos = _movePath[1];
+        Vector2Int nextPos = _movePath[1];
         _movePath.RemoveAt(0);
         Managers.Resource.Destroy(_pathUi[0]);
         _pathUi.RemoveAt(0);
 
-        Vector3Int moveCellDir = nextPos - CellPos;
+        Vector2Int moveCellDir = nextPos - CellPos2;
 
         Dir = GetDirFromVector(moveCellDir);
 
         if (Managers.Map.CanGo(nextPos))
         {
-            CellPos = nextPos;
+            CellPos2 = nextPos;
         }
         else
         {
@@ -228,7 +228,7 @@ public class PlayerController : BaseController
         for (int i = 0; i < _movePath.Count; i++)
         {
             GameObject go = Managers.Resource.Instantiate("Ui/Path");
-            go.transform.position = _movePath[i] + new Vector3(0.5f, 0.5f, 0);
+            go.transform.position = _movePath[i] + new Vector2(0.5f, 0.5f);
             go.GetComponent<PathController>().ChangePathText($"{i}");
             _pathUi.Add(go);
         }

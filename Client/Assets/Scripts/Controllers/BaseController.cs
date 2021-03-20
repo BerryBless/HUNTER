@@ -36,15 +36,22 @@ public class BaseController : MonoBehaviour
         }
     }
 
-    private Vector3Int _cellPos;            // 타일맵의 좌표로 계산
-    protected Vector3Int CellPos
+    private Vector2Int _cellPos;            // 타일맵의 좌표로 계산
+    protected Vector2Int CellPos2
     {
         get { return _cellPos; }
         set
         {
             _cellPos.x = value.x;
             _cellPos.y = value.y;
-            _cellPos.z = value.z;
+        }
+    }protected Vector3Int CellPos
+    {
+        get { return new Vector3Int(_cellPos.x,_cellPos.y,0); }
+        set
+        {
+            _cellPos.x = value.x;
+            _cellPos.y = value.y;
         }
     }
     #endregion
@@ -270,7 +277,7 @@ public class BaseController : MonoBehaviour
     }
 
     // 방향벡터에 따른 방향 Dir 정하기
-    public MoveDir GetDirFromVector(Vector3Int dir)
+    public MoveDir GetDirFromVector(Vector2Int dir)
     {
         if (dir.x > 0)
             return MoveDir.Right;

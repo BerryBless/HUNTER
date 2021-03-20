@@ -48,4 +48,15 @@ public class Util
         }
         return null;
     }
+
+    // 딕셔너리 값있으면 true 없음 add
+    public static bool TryAdd<TKey, TValue>(IDictionary<TKey, TValue> dict, TKey key, TValue addValue)
+    {
+        bool canAdd = !dict.ContainsKey(key);
+
+        if (canAdd)
+            dict.Add(key, addValue);
+
+        return canAdd;
+    }
 }

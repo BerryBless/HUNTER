@@ -81,7 +81,8 @@ public class PoolManager
         }
     }
     // 풀생성
-    public void CreatePool(GameObject original, int count = 10) {
+    public void CreatePool(GameObject original, int count = 10)
+    {
         Pool pool = new Pool();
         pool.Init(original, count); // Pool 만들고
         pool.Root.parent = _root;   // _root에 상속시키기

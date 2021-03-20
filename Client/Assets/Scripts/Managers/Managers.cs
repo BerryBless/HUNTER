@@ -22,7 +22,7 @@ public class Managers : MonoBehaviour
             s_instance = go.GetComponent<Managers>();
 
             // 여기서 사용할 매니져 초기화
-
+            s_instance._pool.Init();
         }
     }
 
@@ -36,15 +36,16 @@ public class Managers : MonoBehaviour
     // 게임 실행에 관한 메니져
     #region Core
     ResourceManager _resource = new ResourceManager();
-
+    PoolManager _pool = new PoolManager();
     public static ResourceManager Resource { get { return Instance._resource; } }
-
+    public static PoolManager Pool { get { return Instance._pool; } }
     #endregion
 
 
     public static void Clear()
     {
         // 여기서 사용할 매니져 클리어
+        Instance._pool.Clear();
     }
 
     #endregion

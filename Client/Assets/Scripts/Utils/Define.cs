@@ -38,5 +38,11 @@ public class Define
         Effect,
         MaxCount,
     }
+    // UI이벤트 구분
+    public enum UIEvent
+    {
+        Click,
+        Drag,
+    }
 
 }

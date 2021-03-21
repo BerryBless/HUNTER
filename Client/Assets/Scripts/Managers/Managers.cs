@@ -41,12 +41,14 @@ public class Managers : MonoBehaviour
     ResourceManager _resource = new ResourceManager();
     PoolManager _pool = new PoolManager();
     AudioManager _audio = new AudioManager();
+    UIManager _UI = new UIManager();
 
     public static SceneManagerEx Scene { get { return Instance._scene; } }
     public static InputManager Input { get { return Instance._input; } }
     public static ResourceManager Resource { get { return Instance._resource; } }
     public static PoolManager Pool { get { return Instance._pool; } }
     public static AudioManager Audio { get { return Instance._audio; } }
+    public static UIManager UI { get { return Instance._UI; } }
     #endregion
 
 
@@ -57,6 +59,7 @@ public class Managers : MonoBehaviour
         Input.Clear();
         Pool.Clear();
         Audio.Clear();
+        UI.Clear();
     }
 
     #endregion

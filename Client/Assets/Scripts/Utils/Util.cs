@@ -23,10 +23,12 @@ public class Util
         return transform.gameObject;
     }
     // 자식중에 컴포넌트 찾기
+    // recursive = true : 자식의 자식까지
+    // <T> : 찾고싶은 컴포넌트
     public static T FindChild<T>(GameObject go, string name = null, bool recursive = false) where T : UnityEngine.Object
     {
         if (go == null) return null;
-        if(recursive == true)
+        if(recursive == false)
         {
             for (int i = 0; i < go.transform.childCount; i++)
             {

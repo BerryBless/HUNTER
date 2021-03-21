@@ -19,22 +19,18 @@ public class PlayerController : BaseController
     protected override void Init()
     {
         base.Init();
-        //Camera.main.orthographicSize = 30;
-        //_speed = 30;
-        //transform.localScale = new Vector3(5, 5, 0);
+
     }
     protected override void UpdateController()
     {
         switch (State)
         {
             case CreatureState.Idle:
-                //GetDirInputKeyboard();
-                GetInputMouse();
+                Util.AddKeyAction(OnMouse);
                 UpdateIdle();
                 break;
             case CreatureState.Moving:
-                //GetDirInputKeyboard();
-                GetInputMouse();
+                Util.AddKeyAction(OnMouse);
                 UpdateMoving();
                 break;
             case CreatureState.Attack:
@@ -203,7 +199,7 @@ public class PlayerController : BaseController
     //    }
     //}
 
-    private void GetInputMouse()
+    private void OnMouse()
     {
 
         if (Input.GetMouseButton(1))

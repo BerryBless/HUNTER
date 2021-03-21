@@ -35,10 +35,14 @@ public class Managers : MonoBehaviour
 
     // 게임 실행에 관한 메니져
     #region Core
+    InputManager _input = new InputManager();
     ResourceManager _resource = new ResourceManager();
     PoolManager _pool = new PoolManager();
+
+    public static InputManager Input { get { return Instance._input; } }
     public static ResourceManager Resource { get { return Instance._resource; } }
     public static PoolManager Pool { get { return Instance._pool; } }
+
     #endregion
 
 
@@ -59,6 +63,6 @@ public class Managers : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        Instance._input.UpdateInput();
     }
 }

@@ -7,6 +7,7 @@ using UnityEngine.UI;
 
 public abstract class UI_Base : MonoBehaviour
 {
+	// UI_켄버스를 포함한 프리펩
 	protected Dictionary<Type, UnityEngine.Object[]> _objects = new Dictionary<Type, UnityEngine.Object[]>();
 	public abstract void Init();
 
@@ -15,6 +16,7 @@ public abstract class UI_Base : MonoBehaviour
 		Init();
 	}
 
+	// 자식을 불러와서 바인드(메모리에 들고있기) 해주기
 	protected void Bind<T>(Type type) where T : UnityEngine.Object
 	{
 		string[] names = Enum.GetNames(type);
@@ -33,6 +35,7 @@ public abstract class UI_Base : MonoBehaviour
 		}
 	}
 
+	// 바인드한거 가져오기
 	protected T Get<T>(int idx) where T : UnityEngine.Object
 	{
 		UnityEngine.Object[] objects = null;
@@ -47,6 +50,7 @@ public abstract class UI_Base : MonoBehaviour
 	protected Button GetButton(int idx) { return Get<Button>(idx); }
 	protected Image GetImage(int idx) { return Get<Image>(idx); }
 
+	// 이벤트 등록하기
 	public static void BindEvent(GameObject go, Action<PointerEventData> action, Define.UIEvent type = Define.UIEvent.Click)
 	{
 		UI_EventHandler evt = Util.GetOrAddComponent<UI_EventHandler>(go);

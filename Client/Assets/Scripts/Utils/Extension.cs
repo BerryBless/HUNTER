@@ -9,7 +9,7 @@ public static class Extension
     // 사용하기 편하게! 
     public static T GetOrAddComponent<T>(this GameObject go) where T : UnityEngine.Component
     {
-        return Util.GetOrAddComponent<T>(go);
+        return go.GetOrAddComponent<T>();
     }
     public static T FindChild<T>(this GameObject go, string name = null, bool recursive = false) where T : UnityEngine.Object
     {

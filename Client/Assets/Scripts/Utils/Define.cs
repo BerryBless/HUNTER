@@ -2,9 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Define 
+public class Define
 {
-    // 헌터에서 Enum 모아두는 클래스
+    // Enum 모아두는 클래스
+    // 상/하/좌/우 | 북/남/서/동 2차원 방향
     public enum MoveDir
     {
         Up,
@@ -13,11 +14,21 @@ public class Define
         Right,
     }
 
+    // 생물체의 State
     public enum CreatureState
     {
         Idle,
         Moving,
         Attack,
         Dead,
+    }
+
+    // 사용할 Scene의 name!
+    public enum Scene
+    {
+        Unknown,
+        Login,
+        Lobby,
+        Game
     }
 }

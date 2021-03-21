@@ -61,15 +61,4 @@ public class Util
         return canAdd;
     }
 
-    // 키보드 액션 등록
-    public static void AddKeyAction (Action keyAction)
-    {
-        Util.DeleteKeyAction(keyAction);        // 같은거 삭제하고
-        Managers.Input.KeyAction += keyAction;  // 새로 등록
-    }
-    // 키보드 액션 삭제
-    public static void DeleteKeyAction(Action keyAction)
-    {
-        Managers.Input.KeyAction -= keyAction;
-    }
 }

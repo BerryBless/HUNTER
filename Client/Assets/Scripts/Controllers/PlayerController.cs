@@ -26,11 +26,11 @@ public class PlayerController : BaseController
         switch (State)
         {
             case CreatureState.Idle:
-                Util.AddKeyAction(OnMouse);
+                Managers.Input.AddKeyAction(OnMouse);
                 UpdateIdle();
                 break;
             case CreatureState.Moving:
-                Util.AddKeyAction(OnMouse);
+                Managers.Input.AddKeyAction(OnMouse);
                 UpdateMoving();
                 break;
             case CreatureState.Attack:

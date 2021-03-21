@@ -11,7 +11,7 @@ public class LobbyScene : BaseScene
     {
         base.Init();
         SceneType = Define.Scene.Lobby;
-        Util.AddKeyAction(NextScene);
+        Managers.Input.AddKeyAction(NextScene);
     }
     private void Update()
     {

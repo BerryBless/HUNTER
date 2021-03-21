@@ -58,15 +58,13 @@ public class Managers : MonoBehaviour
 
     #endregion
 
-    // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
         Init();
     }
-
     // Update is called once per frame
     void Update()
     {
-        Instance._input.UpdateInput();
+        Input.UpdateInput();
     }
 }

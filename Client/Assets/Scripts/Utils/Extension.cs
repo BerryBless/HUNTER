@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public static class Extension
 {
@@ -16,6 +18,11 @@ public static class Extension
     public static bool TryAdd<TKey, TValue>(this IDictionary<TKey, TValue> dict, TKey key, TValue addValue)
     {
         return Util.TryAdd<TKey, TValue>(dict, key, addValue);
+    }
+
+    public static void BindEvent(this GameObject go, Action<PointerEventData> action, Define.UIEvent type = Define.UIEvent.Click)
+    {
+        BindEvent(go, action, type);
     }
 
 }

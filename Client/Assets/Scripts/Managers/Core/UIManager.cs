@@ -4,11 +4,12 @@ using UnityEngine;
 
 public class UIManager
 {
-    int _order = 10;
+    int _order = 10;// UI의 SortOrder
 
-    Stack<UI_Popup> _popupStack = new Stack<UI_Popup>();
-    UI_Scene _sceneUI = null;
+    Stack<UI_Popup> _popupStack = new Stack<UI_Popup>();// 팝업UI스택
+    UI_Scene _sceneUI = null;//씬UI
 
+    // UI_정리용 루트
     public GameObject Root
     {
         get
@@ -20,9 +21,10 @@ public class UIManager
         }
     }
 
+    // 캔버스 셋팅
     public void SetCanvas(GameObject go, bool sort = true)
     {
-        Canvas canvas = Util.GetOrAddComponent<Canvas>(go);
+        Canvas canvas = go.GetOrAddComponent<Canvas>();
         canvas.renderMode = RenderMode.ScreenSpaceOverlay;
         canvas.overrideSorting = true;
 
@@ -50,7 +52,7 @@ public class UIManager
         canvas.renderMode = RenderMode.WorldSpace;
         canvas.worldCamera = Camera.main;
 
-        return Util.GetOrAddComponent<T>(go);
+        return go.GetOrAddComponent<T>();
     }
 
     public T MakeSubItem<T>(Transform parent = null, string name = null) where T : UI_Base
@@ -62,30 +64,32 @@ public class UIManager
         if (parent != null)
             go.transform.SetParent(parent);
 
-        return Util.GetOrAddComponent<T>(go);
+        return go.GetOrAddComponent<T>();
     }
 
+    // UI_Scene 나타내기
     public T ShowSceneUI<T>(string name = null) where T : UI_Scene
     {
         if (string.IsNullOrEmpty(name))
             name = typeof(T).Name;
 
         GameObject go = Managers.Resource.Instantiate($"UI/Scene/{name}");
-        T sceneUI = Util.GetOrAddComponent<T>(go);
+        T sceneUI = go.GetOrAddComponent<T>();
         _sceneUI = sceneUI;
 
-        go.transform.SetParent(Root.transform);
+        go.transform.SetParent(Root.transform); 
 
         return sceneUI;
     }
 
+    // UI_Popup 나타내기
     public T ShowPopupUI<T>(string name = null) where T : UI_Popup
     {
         if (string.IsNullOrEmpty(name))
             name = typeof(T).Name;
 
         GameObject go = Managers.Resource.Instantiate($"UI/Popup/{name}");
-        T popup = Util.GetOrAddComponent<T>(go);
+        T popup = go.GetOrAddComponent<T>();
         _popupStack.Push(popup);
 
         go.transform.SetParent(Root.transform);
@@ -93,6 +97,7 @@ public class UIManager
         return popup;
     }
 
+    // 팝업 닫기 맨위에것 체크
     public void ClosePopupUI(UI_Popup popup)
     {
         if (_popupStack.Count == 0)
@@ -106,7 +111,7 @@ public class UIManager
 
         ClosePopupUI();
     }
-
+    // 맨위의 팝업 닫기
     public void ClosePopupUI()
     {
         if (_popupStack.Count == 0)

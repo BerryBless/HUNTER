@@ -31,4 +31,12 @@ public class Define
         Lobby,
         Game
     }
+    // 오디오 소스 Type
+    public enum AudioRole
+    {
+        Bgm,
+        Effect,
+        MaxCount,
+    }
+
 }

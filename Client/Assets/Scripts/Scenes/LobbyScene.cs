@@ -11,18 +11,23 @@ public class LobbyScene : BaseScene
     {
         base.Init();
         SceneType = Define.Scene.Lobby;
-        Managers.Input.AddKeyAction(NextScene);
+        Managers.Audio.Play("Sounds/8-Bit Sfx/Climb_Rope_Loop_00",Define.AudioRole.Bgm,0.5f);
+        Managers.Input.AddKeyAction(KeyInput);
     }
     private void Update()
     {
         
     }
 
-    void NextScene()
+    void KeyInput()
     {
         if (Input.GetKeyDown(KeyCode.Q))
         {
             Managers.Scene.LoadScene(Define.Scene.Game);
+        }
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            Managers.Audio.Play("Sounds/8-Bit Sfx/Craft_00");
         }
     }
 }

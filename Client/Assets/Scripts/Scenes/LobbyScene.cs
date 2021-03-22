@@ -11,7 +11,7 @@ public class LobbyScene : BaseScene
     {
         base.Init();
         SceneType = Define.Scene.Lobby;
-        Managers.Audio.Play("Sounds/8-Bit Sfx/Climb_Rope_Loop_00",Define.AudioRole.Bgm,0.5f);
+        //Managers.Audio.Play("Sounds/8-Bit Sfx/Climb_Rope_Loop_00",Define.AudioRole.Bgm,0.5f);
         Managers.Input.AddKeyAction(KeyInput);
     }
     private void Update()
@@ -27,7 +27,7 @@ public class LobbyScene : BaseScene
         }
         if (Input.GetKeyDown(KeyCode.A))
         {
-            Managers.Audio.Play("Sounds/8-Bit Sfx/Craft_00");
+            //Managers.Audio.Play("Sounds/8-Bit Sfx/Craft_00");
         }
     }
 }

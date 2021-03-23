@@ -19,7 +19,7 @@ public class PlayerController : BaseController
     protected override void Init()
     {
         base.Init();
-
+        _speed = 30f;
     }
     protected override void UpdateController()
     {
@@ -202,12 +202,12 @@ public class PlayerController : BaseController
     private void OnMouse()
     {
 
-        if (Input.GetMouseButton(1))
+        if (Input.GetMouseButtonDown(1))
         {
             Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             _destCellPos = Managers.Map.CurrentGrid.WorldToCell(mousePos);
 
-            if (Managers.Map.CanGo(_destCellPos))
+            //if (Managers.Map.CanGo(_destCellPos))
             {
                 State = CreatureState.Moving;
                 _movePath = Managers.Map.FindPath(CellPos, _destCellPos);

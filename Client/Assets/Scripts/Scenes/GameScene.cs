@@ -13,7 +13,7 @@ public class GameScene : BaseScene
         base.Init();
         SceneType = Define.Scene.Game;
 
-        Managers.Map.LoadMap(1);
+        Managers.Map.LoadMap(2);
         Managers.Resource.Instantiate("Creatures/Player/Player");
     }
 }

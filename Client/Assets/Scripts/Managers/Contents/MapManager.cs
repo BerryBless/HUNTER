@@ -164,7 +164,7 @@ public class MapManager
 
     public List<Vector2Int> FindPath(Vector3Int startCellPos, Vector3Int destCellPos, bool ignoreDestCollision = false)
     {
-        return FindPath(new Vector2Int(startCellPos.x,startCellPos.y), new Vector2Int(destCellPos.x,destCellPos.y), ignoreDestCollision);
+        return FindPath(new Vector2Int(startCellPos.x, startCellPos.y), new Vector2Int(destCellPos.x, destCellPos.y), ignoreDestCollision);
     }
     public List<Vector2Int> FindPath(Vector2Int startCellPos, Vector2Int destCellPos, bool ignoreDestCollision = false)
     {
@@ -194,6 +194,9 @@ public class MapManager
         Pos pos = Cell2Pos(startCellPos);
         Pos dest = Cell2Pos(destCellPos);
 
+        int minh = Int32.MaxValue;
+        Pos tempPos = Cell2Pos(destCellPos);
+
         // 시작점 발견 (예약 진행)
         openList.Add(pos, CalcG(0) + CalcH(pos, dest));
         pq.Push(new PQNode() { F = CalcG(0) + CalcH(pos, dest), G = 0, Y = pos.Y, X = pos.X });
@@ -211,9 +214,25 @@ public class MapManager
 
             // 방문한다
             closedList.Add(node);
+            // 목적지가 아닌 최단거리 저장
+            if (minh > pqNode.F - pqNode.G)
+            {
+                minh = pqNode.F - pqNode.G;
+                tempPos = node;
+            }
+            // TODO 목적지가 갈 수 없는곳 커팅
+            else
+            {
+                if(CanGo(destCellPos) == false)
+                {
+                    break;
+                }
+            }
             // 목적지 도착했으면 바로 종료
             if (node == dest)
                 break;
+
+
 
             // 상하좌우 등 이동할 수 있는 좌표인지 확인해서 예약(open)한다
             for (int i = 0; i < _deltaY.Length; i++)
@@ -250,10 +269,12 @@ public class MapManager
                     openList[next] = g + h;
 
                 pq.Push(new PQNode() { F = g + h, G = g, Y = next.Y, X = next.X });
-                if (parent.TryAdd( next, node) == false)
+                if (parent.TryAdd(next, node) == false)
                     parent[next] = node;
             }
         }
+        if (dest != tempPos)
+            return CalcCellPathFromParent(parent, tempPos);
         return CalcCellPathFromParent(parent, dest);
     }
 

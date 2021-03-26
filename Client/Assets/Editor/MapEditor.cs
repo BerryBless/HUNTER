@@ -55,8 +55,7 @@ public class MapEditor : MonoBehaviour
         foreach (GameObject go in gameObjects)
         {
             Tilemap tmBase = go.FindChild<Tilemap>("Tilemap_Base", true);       // 맵전체 크기정보
-            //Tilemap tmColl = go.FindChild<Tilemap>("Tilemap_Collision", true);  // 충돌체크 정보가있는 콜리션
-            Tilemap tmNode = go.FindChild<Tilemap>("Tilemap_Node", true);  // 노드 나누는 정보가있는 콜리션
+            Tilemap tmColl = go.FindChild<Tilemap>("Tilemap_Collision", true);  // 충돌체크 정보가있는 콜리션
 
             // 추출한거 출력하기
             using (var writer = File.CreateText($"{pathPrefix}/{go.name}.txt"))
@@ -66,10 +65,10 @@ public class MapEditor : MonoBehaviour
                 writer.WriteLine(tmBase.cellBounds.yMin);
                 writer.WriteLine(tmBase.cellBounds.yMax);
 
+                #region MakeMap
                 int sizeX = tmBase.cellBounds.xMax - tmBase.cellBounds.xMin +1;
                 int sizeY = tmBase.cellBounds.yMax - tmBase.cellBounds.yMin +1;
 
-                #region MakeMap
                 map = new int[sizeY, sizeX];
 
                 // 위에서 아래로
@@ -79,16 +78,11 @@ public class MapEditor : MonoBehaviour
                     for (int x = tmBase.cellBounds.xMin; x <= tmBase.cellBounds.xMax; x++)
                     {
                         // 추출해서
-                        //TileBase tileColl = tmColl.GetTile(new Vector3Int(x, y, 0));
-                        TileBase tileNode = tmNode.GetTile(new Vector3Int(x, y, 0));
-                        // 충돌되는 물체면 1
-                        //if (tileColl != null)
-                        //{
-                        //    writer.Write("1 ");
-                        //}
-                        if (tileNode != null)
+                        TileBase tileColl = tmColl.GetTile(new Vector3Int(x, y, 0));
+                        
+                        if (tileColl != null)
                         {
-                            Sprite t = tmNode.GetSprite(new Vector3Int(x, y, 0));
+                            Sprite t = tmColl.GetSprite(new Vector3Int(x, y, 0));
                             int n;
                             if (nodeNumber.TryGetValue(t.name, out n) == false)
                             {
@@ -109,8 +103,8 @@ public class MapEditor : MonoBehaviour
                     writer.WriteLine();
                 }
                 #endregion
-
                 #region adj
+                // 간선출력
                 int adjCount;
                 List<List<int>> adj = MakeAdj(map, nodeCount, out adjCount);
 

@@ -17,7 +17,7 @@ public class MapManager
     public int SizeX { get { return MaxX - MinX + 1; } }
     public int SizeY { get { return MaxY - MinY + 1; } }
 
-    bool[,] _collision;//장애물 위치 저장할 불리언 배열 (y, x)
+    short[,] _collision;//장애물 위치 저장할 불리언 배열 (y, x)
 
     // 갈수있냐 (충돌할 물체가 있냐)
     public bool CanGo(Vector3Int cellPos)
@@ -33,7 +33,7 @@ public class MapManager
 
         int x = cellPos.x - MinX;
         int y = MaxY - cellPos.y;
-        return !_collision[y, x];
+        return _collision[y, x] != 0;
     }
 
     public bool LoadMap(int mapId)
@@ -69,7 +69,7 @@ public class MapManager
 
         // 충돌 판정위한  불리언 배열..
         // TODO 비트마스크로?
-        _collision = new bool[SizeY, SizeX];
+        _collision = new short[SizeY, SizeX];
 
         // 맵순회
         for (int y = 0; y < SizeY; y++)
@@ -77,8 +77,8 @@ public class MapManager
             string line = reader.ReadLine();
             for (int x = 0; x < SizeX; x++)
             {
-                // 1이면 충돌체 있음
-                _collision[y, x] = (line[x] == '1' ? true : false);
+                // 0이면 충돌체 있음
+                _collision[y, x] = Convert.ToInt16(line[x] - '0'); ;
             }
         }
         return true;

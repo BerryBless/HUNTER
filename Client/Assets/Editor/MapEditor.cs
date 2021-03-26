@@ -19,7 +19,7 @@ public class MapEditor : MonoBehaviour
         GenerateMap("../Common/MapData");       // 서버에서 쓸꺼
     }
 
-    private static List<List<int>> MakeAdj(int[,] map,int nodeCount, out int cnt)
+    private static List<List<int>> MakeAdj(int[,] map, int nodeCount, out int cnt)
     {
         List<List<int>> adj = new List<List<int>>();
         // c++ 처럼 한번에 초기화 하는방법 없나?
@@ -66,8 +66,8 @@ public class MapEditor : MonoBehaviour
                 writer.WriteLine(tmBase.cellBounds.yMax);
 
                 #region MakeMap
-                int sizeX = tmBase.cellBounds.xMax - tmBase.cellBounds.xMin +1;
-                int sizeY = tmBase.cellBounds.yMax - tmBase.cellBounds.yMin +1;
+                int sizeX = tmBase.cellBounds.xMax - tmBase.cellBounds.xMin + 1;
+                int sizeY = tmBase.cellBounds.yMax - tmBase.cellBounds.yMin + 1;
 
                 map = new int[sizeY, sizeX];
 
@@ -79,7 +79,7 @@ public class MapEditor : MonoBehaviour
                     {
                         // 추출해서
                         TileBase tileColl = tmColl.GetTile(new Vector3Int(x, y, 0));
-                        
+
                         if (tileColl != null)
                         {
                             Sprite t = tmColl.GetSprite(new Vector3Int(x, y, 0));
@@ -90,13 +90,13 @@ public class MapEditor : MonoBehaviour
                                 n = nodeCount;
                                 nodeNumber.Add(t.name, n);
                             }
-                            writer.Write($"{ n} ");
+                            writer.Write($"{ n}");
                             map[tmBase.cellBounds.yMax - y, x - tmBase.cellBounds.xMin] = n;
                         }
                         // 없으면 0
                         else
                         {
-                            writer.Write("0 ");
+                            writer.Write("0");
                             map[tmBase.cellBounds.yMax - y, x - tmBase.cellBounds.xMin] = 0;
                         }
                     }
@@ -109,8 +109,8 @@ public class MapEditor : MonoBehaviour
                 List<List<int>> adj = MakeAdj(map, nodeCount, out adjCount);
 
                 writer.WriteLine($"{nodeCount} {adjCount}");
-                foreach(List<int> list in adj)
-                    foreach(int i in list)
+                foreach (List<int> list in adj)
+                    foreach (int i in list)
                         writer.WriteLine($"{adj.IndexOf(list)} {i}");
                 #endregion
             }

@@ -157,10 +157,14 @@ public class MapManager
         return new Vector2Int(pos.X + MinX, MaxY - pos.Y);
     }
 
-    // U D L R UL UR DL DR
+    // U D L R
     int[] _deltaY = new int[] { 1, -1, 0, 0, 1, 1, -1, -1 };
     int[] _deltaX = new int[] { 0, 0, -1, 1, -1, 1, -1, 1 };
     int[] _cost = new int[] { 10, 10, 10, 10, 14, 14, 14, 14 };
+    // U D L R UL UR DL DR
+    //int[] _deltaY = new int[] { 1, -1, 0, 0, 1, 1, -1, -1 };
+    //int[] _deltaX = new int[] { 0, 0, -1, 1, -1, 1, -1, 1 };
+    //int[] _cost = new int[] { 10, 10, 10, 10, 14, 14, 14, 14 };
 
     public List<Vector2Int> FindPath(Vector3Int startCellPos, Vector3Int destCellPos, bool ignoreDestCollision = false)
     {

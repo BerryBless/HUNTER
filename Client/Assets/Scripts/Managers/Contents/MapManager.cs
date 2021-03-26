@@ -158,9 +158,9 @@ public class MapManager
     }
 
     // U D L R
-    int[] _deltaY = new int[] { 1, -1, 0, 0, 1, 1, -1, -1 };
-    int[] _deltaX = new int[] { 0, 0, -1, 1, -1, 1, -1, 1 };
-    int[] _cost = new int[] { 10, 10, 10, 10, 14, 14, 14, 14 };
+    int[] _deltaY = new int[] { 1, -1, 0, 0 };
+    int[] _deltaX = new int[] { 0, 0, -1, 1 };
+    int[] _cost = new int[] { 10, 10, 10, 10 };
     // U D L R UL UR DL DR
     //int[] _deltaY = new int[] { 1, -1, 0, 0, 1, 1, -1, -1 };
     //int[] _deltaX = new int[] { 0, 0, -1, 1, -1, 1, -1, 1 };
@@ -170,6 +170,9 @@ public class MapManager
     {
         return FindPath(new Vector2Int(startCellPos.x, startCellPos.y), new Vector2Int(destCellPos.x, destCellPos.y), ignoreDestCollision);
     }
+    // TODO 이걸 재사용해서 2번의 Astar
+    // 1. 노드간의 최소거리
+    // 2. 1)을이용한 실제 길찾기
     public List<Vector2Int> FindPath(Vector2Int startCellPos, Vector2Int destCellPos, bool ignoreDestCollision = false)
     {
         // Astar

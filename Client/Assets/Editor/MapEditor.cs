@@ -19,7 +19,7 @@ public class MapEditor : MonoBehaviour
         GenerateMap("../Common/MapData");       // 서버에서 쓸꺼
     }
 
-    private static List<List<int>> MakeAdj(int[,] map, int nodeCount, out int cnt)
+    private static List<List<int>> MakeAdj(ref int[,] map, int nodeCount, out int cnt)
     {
         List<List<int>> adj = new List<List<int>>();
         // c++ 처럼 한번에 초기화 하는방법 없나?
@@ -28,15 +28,16 @@ public class MapEditor : MonoBehaviour
         cnt = 0;
         // TODO 간선 만들기
 
+
         // TEMP 출력확인
-        cnt = 7;
-        adj[1].Add(3);
-        adj[1].Add(2);
-        adj[1].Add(4);
-        adj[2].Add(5);
-        adj[4].Add(7);
-        adj[4].Add(5);
-        adj[5].Add(6);
+        //cnt = 7;
+        //adj[1].Add(3);
+        //adj[1].Add(2);
+        //adj[1].Add(4);
+        //adj[2].Add(5);
+        //adj[4].Add(7);
+        //adj[4].Add(5);
+        //adj[5].Add(6);
 
         return adj;
     }
@@ -107,7 +108,7 @@ public class MapEditor : MonoBehaviour
                 #region MakePath
                 // 간선 생성
                 int adjCount;
-                List<List<int>> adj = MakeAdj(map, nodeCount, out adjCount);
+                List<List<int>> adj = MakeAdj(ref map, nodeCount, out adjCount);
 
                 //writer.WriteLine($"{nodeCount} {adjCount}");
                 //foreach (List<int> list in adj)
@@ -143,19 +144,20 @@ public class MapEditor : MonoBehaviour
                                 floyd[i, j] = floyd[i, k] + floyd[k, j];
                             }
                 // 최단거리 출력
+                // TODO 갈수없는 곳(고립된곳) 처리
                 writer.WriteLine($"{nodeCount}");
                 List<int> path = new List<int>();
                 for (int i = 1; i <= nodeCount; i++)
                 {
                     for (int j = 1; j <= nodeCount; j++)
                     {
-                        writer.Write($"{i} {j} ");
-                        // size : vector
-                        if (i == j) { writer.WriteLine($"0 "); continue; }
+                        //writer.Write($"{i} {j} ");
+                        // path.size path.list[]
+                        if (i == j) { writer.WriteLine($"1 {j} "); continue; }
                         path.Clear();
-                        //path.Add(i); // here
+                        path.Add(i); // here
                         GetPath(i, j, ref path, ref dp);
-                        //path.Add(j); // dest
+                        path.Add(j); // dest
                         writer.Write($"{path.Count} ");
                         foreach (int v in path)
                         {

@@ -60,12 +60,12 @@ public class MapEditor : MonoBehaviour
             // 추출한거 출력하기
             using (var writer = File.CreateText($"{pathPrefix}/{go.name}.txt"))
             {
+                #region MakeMap
                 writer.WriteLine(tmBase.cellBounds.xMin);
                 writer.WriteLine(tmBase.cellBounds.xMax);
                 writer.WriteLine(tmBase.cellBounds.yMin);
                 writer.WriteLine(tmBase.cellBounds.yMax);
 
-                #region MakeMap
                 int sizeX = tmBase.cellBounds.xMax - tmBase.cellBounds.xMin + 1;
                 int sizeY = tmBase.cellBounds.yMax - tmBase.cellBounds.yMin + 1;
 
@@ -90,30 +90,95 @@ public class MapEditor : MonoBehaviour
                                 n = nodeCount;
                                 nodeNumber.Add(t.name, n);
                             }
-                            writer.Write($"{ n}");
+                            writer.Write($"{n} ");
                             map[tmBase.cellBounds.yMax - y, x - tmBase.cellBounds.xMin] = n;
                         }
                         // 없으면 0
                         else
                         {
-                            writer.Write("0");
+                            writer.Write("0 ");
                             map[tmBase.cellBounds.yMax - y, x - tmBase.cellBounds.xMin] = 0;
                         }
                     }
                     writer.WriteLine();
                 }
                 #endregion
-                #region adj
-                // 간선출력
+
+                #region MakePath
+                // 간선 생성
                 int adjCount;
                 List<List<int>> adj = MakeAdj(map, nodeCount, out adjCount);
 
-                writer.WriteLine($"{nodeCount} {adjCount}");
+                //writer.WriteLine($"{nodeCount} {adjCount}");
+                //foreach (List<int> list in adj)
+                //    foreach (int i in list)
+                //        writer.WriteLine($"{adj.IndexOf(list)} {i}");
+
+                // 최단거리 캐싱
+                int[,] floyd = new int[nodeCount + 1, nodeCount + 1];
+                int[,] dp = new int[nodeCount + 1, nodeCount + 1];
+
+                for (int i = 1; i <= nodeCount; i++)
+                    for (int j = 1; j <= nodeCount; j++)
+                    {
+                        floyd[i, j] = 0x3f3f3f3f;
+                        dp[i, j] = -1;
+                        if (i == j) floyd[i, i] = 0;
+                    }
                 foreach (List<int> list in adj)
                     foreach (int i in list)
-                        writer.WriteLine($"{adj.IndexOf(list)} {i}");
+                    {
+                        // TODO 간선길이 주기
+                        floyd[i, adj.IndexOf(list)] = 1;
+                        floyd[adj.IndexOf(list), i] = 1;
+                    }
+
+                // FLOYD algorithm
+                for (int k = 1; k <= nodeCount; k++)
+                    for (int i = 1; i <= nodeCount; i++)
+                        for (int j = 1; j <= nodeCount; j++)
+                            if (floyd[i, j] > floyd[i, k] + floyd[k, j])
+                            {
+                                dp[i, j] = k;
+                                floyd[i, j] = floyd[i, k] + floyd[k, j];
+                            }
+                // 최단거리 출력
+                writer.WriteLine($"{nodeCount}");
+                List<int> path = new List<int>();
+                for (int i = 1; i <= nodeCount; i++)
+                {
+                    for (int j = 1; j <= nodeCount; j++)
+                    {
+                        writer.Write($"{i} {j} ");
+                        // size : vector
+                        if (i == j) { writer.WriteLine($"0 "); continue; }
+                        path.Clear();
+                        //path.Add(i); // here
+                        GetPath(i, j, ref path, ref dp);
+                        //path.Add(j); // dest
+                        writer.Write($"{path.Count} ");
+                        foreach (int v in path)
+                        {
+                            writer.Write($"{v} ");
+                        }
+
+                        writer.WriteLine();
+                    }
+                }
+
+
                 #endregion
             }
+        }
+    }
+
+    public static void GetPath(int u, int v, ref List<int> path, ref int[,] dp)
+    {
+        if (dp[u, v] != -1)
+        {
+            GetPath(u, dp[u, v], ref path, ref dp);
+            path.Add(dp[u, v]);
+            GetPath(dp[u, v], v, ref path, ref dp);
         }
     }
 #endif

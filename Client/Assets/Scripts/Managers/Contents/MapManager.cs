@@ -71,14 +71,14 @@ public class MapManager
         // TODO 비트마스크로?
         _collision = new short[SizeY, SizeX];
 
-        // 맵순회
+        // 2d맵을 2d array로 변환
         for (int y = 0; y < SizeY; y++)
         {
             string line = reader.ReadLine();
-            for (int x = 0; x < SizeX; x++)
+            string[] num = line.Split(' ');// 사이에 공백이 있음
+            for(int x = 0; x< SizeX; x++)
             {
-                // 0이면 충돌체 있음
-                _collision[y, x] = Convert.ToInt16(line[x] - '0'); ;
+                _collision[y, x] = Convert.ToInt16(num[x]);
             }
         }
         return true;
@@ -171,8 +171,8 @@ public class MapManager
         return FindPath(new Vector2Int(startCellPos.x, startCellPos.y), new Vector2Int(destCellPos.x, destCellPos.y), ignoreDestCollision);
     }
     // TODO 이걸 재사용해서 2번의 Astar
-    // 1. 노드간의 최소거리
-    // 2. 1)을이용한 실제 길찾기
+    // 1. 노드간의 최소거리 (플로이드로 미리 캐싱해놓기?)
+    // 2. 1)을이용한 실제 길찾기 (그 노드 외는 거들떠보지 않기)
     public List<Vector2Int> FindPath(Vector2Int startCellPos, Vector2Int destCellPos, bool ignoreDestCollision = false)
     {
         // Astar

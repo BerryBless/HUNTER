@@ -19,6 +19,8 @@ public class MapEditor : MonoBehaviour
         GenerateMap("../Common/MapData");       // 서버에서 쓸꺼
     }
 
+    private static int INFI = 0x3f3f3f3f;
+
     private static int[,] MakeAdj(ref int[,] map, int nodeCount, int sizeY, int sizeX)
     {
         int[,] adj = new int[nodeCount + 1, nodeCount + 1];
@@ -28,7 +30,7 @@ public class MapEditor : MonoBehaviour
         for (int i = 1; i <= nodeCount; i++)
             for (int j = 1; j <= nodeCount; j++)
             {
-                adj[i, j] = 0x3f3f3f3f;
+                adj[i, j] = INFI;
                 if (i == j) adj[i, i] = 0;
             }
         for (int y = 0; y < sizeY; y++)
@@ -134,10 +136,22 @@ public class MapEditor : MonoBehaviour
             using (var writer = File.CreateText($"{pathPrefix}/{go.name}.txt"))
             {
                 #region PrintMap
+                /* Map Size
+                 * xMin
+                 * xMax
+                 * yMin
+                 * yMax
+                 */
                 writer.WriteLine(tmBase.cellBounds.xMin);
                 writer.WriteLine(tmBase.cellBounds.xMax);
                 writer.WriteLine(tmBase.cellBounds.yMin);
                 writer.WriteLine(tmBase.cellBounds.yMax);
+
+                /* MAP출력
+                 * 1 1 1 1
+                 * 1 0 3 3
+                 * 1 2 2 2 
+                 */
 
                 // 위에서 아래로
                 for (int y = 0; y < sizeY; y++)
@@ -152,33 +166,42 @@ public class MapEditor : MonoBehaviour
                 #endregion
 
                 #region PrintPath
+                /*
+                 * nodeCount
+                 * here dest pathCount [print path]
+                 */
                 {
                     // 최단거리 출력
-                    // TODO 갈수없는 곳(고립된곳) 처리
                     writer.WriteLine($"{nodeCount}");
                     List<int> path = new List<int>();
                     for (int i = 1; i <= nodeCount; i++)
                     {
                         for (int j = 1; j <= nodeCount; j++)
                         {
-                            //writer.Write($"{i} {j} ");
-                            // path.size path.list[]
-                            if (i == j) { writer.WriteLine($"1 {j} "); continue; }
-                            path.Clear();
-                            path.Add(i); // here
-                            GetPath(i, j, ref path, ref floydPath);
-                            path.Add(j); // dest
-                            writer.Write($"{path.Count} ");
-                            foreach (int v in path)
-                            {
-                                writer.Write($"{v} ");
-                            }
+                            writer.Write($"{i} {j} ");
 
-                            writer.WriteLine();
+                            if (adj[i, j] == INFI)
+                            {
+                                // 고립된곳
+                                // writer.WriteLine("-1");
+                            }
+                            else
+                            {
+                                path.Clear();
+                                //path.Add(i); // here
+                                GetPath(i, j, ref path, ref floydPath);
+                                //path.Add(j); // dest
+
+                                writer.Write($"{path.Count} ");
+                                foreach (int v in path)
+                                {
+                                    writer.Write($"{v} ");
+                                }
+                                writer.WriteLine();
+                            }
                         }
                     }
                 }
-
                 #endregion
             }
             #endregion
